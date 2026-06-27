@@ -1,0 +1,26 @@
+HIS Automator - Changelog
+
+Version 2.0.0 (2026-06-27)
+--------------------------
+
+What's New:
+1. Performance & Execution Speedups
+   - Windows Media OCR Engine Caching: OCR engine is cached globally in a thread-safe singleton, saving initialization overhead on every scan.
+   - Template Image Caching & Scaling: Match templates ('co_button.png', 'image3_icon.png') are loaded and pre-scaled once in memory, avoiding slow disk accesses.
+   - Lower PyAutoGUI Action Latency: pyautogui.PAUSE is lowered to 0.05s, with explicit waits applied only where eHospital rendering requires it.
+   - Region Screenshots: Region-based grabbing (ImageGrab.grab with bbox) captures only relevant areas for labels and tab focus instead of full screenshots.
+   - Batch OCR Scanning: In Fast Optimization Mode, the tool scans the entire document code column at once, dramatically reducing row-by-row OCR calls.
+
+2. Safety & Error Recovery
+   - Pre-delete Row Verification: Checks each row's THYL ID and document code right before clicking to prevent shifts or scroll mismatch deletions.
+   - Session Diagnostics Evidence: Writes a 'debug/session_log_*.json' containing full stats, deleted codes, and base64 crops of the cells processed as evidence.
+   - Responsive Stops: Checks stop request flags at every operation (popup checks, waiter loops, OCR method retries) to interrupt immediately.
+
+3. Calibration Layers
+   - Layout Profiles Caching: Calibrations are persisted in local 'layout_profiles.json' and restored based on screen resolution and HIS window geometry.
+   - Multi-layered Recovery: Falls back from layouts profile to OpenCV column separation to OCR calibration to standard scaled offsets.
+
+4. UI Options
+   - Optimization Mode Selector: Add 'Safe', 'Balanced', and 'Fast' presets inside Settings (Cài đặt) panel.
+   - Wait Timeout Overrides: Custom numeric timeout overrides for popup dialogs and grid loads.
+   - Status updates: Detailed progress displays (e.g. "Tiến độ: đã xử lý dòng 4 / 12").
